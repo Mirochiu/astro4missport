@@ -24,203 +24,6 @@ const $$Copyright = createComponent(async ($$result, $$props, $$slots) => {
 All rights reserved by <img src="https://storage.googleapis.com/mis-sport/logo/mis-logo.png" alt="logo" width="36" height="auto" class="rounded-circle"> MIS-SPORT.</span> </div> </section>`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/Copyright.astro", void 0);
 
-const str2token = (s) =>
-    s
-        .split(";")
-        .map((v) => v.trim())
-        .filter(Boolean);
-
-const token2tagUrl = (list) => {
-    let tag;
-    return list.map((token) => {
-        let url = token;
-        if (token.startsWith("[")) {
-            let splited = token.split("]");
-            tag = splited[0].substring(1).trim();
-            url = splited.slice(1).join("]");
-        }
-        return { tag, url: url.trim() };
-    });
-};
-
-
-const AllSizes = ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
-
-// input string format:'x-y'
-// support rules:s-l, s-, m
-// output array:[], [x], [x,y,z,...]
-const str2sizes = (s) => {
-    if (s && typeof s === 'string') {
-        const t = s.trim();
-        const r = t.toUpperCase().split('-');
-        if (r.length == 1) return [r]
-        const b = AllSizes.indexOf(r[0]);
-        if (b != -1) {
-            let e = AllSizes.indexOf(r[1]);
-            if (e >= 0) e += 1;
-            else if (r.length > 1) e = AllSizes.length;
-            return AllSizes.slice(b, e)
-        }
-    }
-    return []
-};
-
-// input string format: 'color' or 'color(x-y)' or '[label]color(x-y)'
-// output object:{ label:string, color:string, sizes:array}
-const str2obj = (s) => {
-    if (s && typeof s !== 'string') return null
-    let o = {}, t = s.trim(), p;
-    if (t.startsWith('[')) {
-        p = t.indexOf(']');
-        if (p != -1) o.label = t.substring(1, p).trim();
-        t = t.substring(p + 1);
-    }
-    p = t.indexOf('(');
-    o.color = (p === -1 ? t : t.substring(0, p)).trim();
-    if (!o.color) return null
-    if (p === -1) {
-        o.sizes = [];
-        return o
-    }
-    t = t.substring(p + 1);
-    p = t.lastIndexOf(')');
-    if (p === -1) return null
-    o.sizes = str2sizes(t.substring(0, p));
-    return o
-};
-
-const ToImgObjectList = (ImgList, Img) => token2tagUrl(str2token(ImgList || Img || ''));
-
-const ToColreSizeList = (ColorWithSizes) => str2token(ColorWithSizes || '').map(str2obj).filter(Boolean);
-
-var __freeze$1 = Object.freeze;
-var __defProp$1 = Object.defineProperty;
-var __template$1 = (cooked, raw) => __freeze$1(__defProp$1(cooked, "raw", { value: __freeze$1(raw || cooked.slice()) }));
-var _a$1;
-const $$Astro$6 = createAstro("https://astro4missport.mirochiu.page");
-const $$ProductMain = createComponent(async ($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro$6, $$props, $$slots);
-  Astro2.self = $$ProductMain;
-  const { brandName, content } = Astro2.props;
-  const withComma = (v) => {
-    let num = NaN;
-    if (typeof v === "number")
-      num = v;
-    else if (typeof v === "string")
-      num = parseInt(v);
-    return !isNaN(num) && num.toLocaleString() || "";
-  };
-  const setupPrices = (v1, v2) => {
-    const retval = {};
-    let i1 = parseInt(v1 || ""), i2 = parseInt(v2 || "");
-    if (isNaN(i1)) {
-      if (isNaN(i2))
-        throw new Error(`invalid prices:${v1} ${v2}`);
-      retval.Price = withComma(i2);
-    } else if (isNaN(i2)) {
-      retval.Price = withComma(i1);
-    } else if (i1 == i2) {
-      retval.Price = withComma(i1);
-    } else {
-      if (i1 > i2) {
-        retval.Original = withComma(i1);
-        retval.Discounted = withComma(i2);
-      } else {
-        retval.Original = withComma(i2);
-        retval.Discounted = withComma(i1);
-      }
-    }
-    return retval;
-  };
-  const { Price, Original, Discounted } = setupPrices(
-    content.Price,
-    content.Price2
-  );
-  const ColreSizeList = ToColreSizeList(
-    content.ColorWithSizes
-  );
-  const ExtendedImgObjList = ToImgObjectList(
-    content.ImgList,
-    content.Img
-  ).map((io) => {
-    const found = ColreSizeList.find(
-      (c) => c.label === io.tag
-    );
-    return {
-      ...io,
-      styleValue: found ? `background-color:${found.color};opacity:0.6;border:solid 1px` : null
-    };
-  });
-  const AllSizes = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
-  return renderTemplate(_a$1 || (_a$1 = __template$1(["<!-- Main -->", `<section id="main" class="wrapper style2"> <div class="inner"> <!-- Buttons --> <ul j-if="CanBack" class="actions"> <li> <a href="#" class="button" onclick="history.back();">\u56DE\u4E0A\u9801</a> </li> </ul> <hr> <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb"> <ol class="breadcrumb"> <li class="breadcrumb-item"> <a class="link-dark" href="/">HOME</a> </li> `, " ", ' </ol> </nav> <hr> <!-- Content --> <div class="row" style="display:flex; flex-direction:row;"> <div class="col-5 col-5-xlarge col-5-large col-12-medium col-12-small col-12-xsmall"> <!-- lg \u4EE5\u4E0A\u986F\u793A .gallery --> <div class="gallery d-none d-lg-block product-img-window"> ', ' </div> <!-- md \u4EE5\u4E0B\u986F\u793A .slideshow-container --> <div class="d-block d-lg-none"> <!-- Slideshow container --> <div class="slideshow-container product-img-slider"> ', " ", ' </div> <div class="product-img-dots" style="text-align:center"> ', ' </div> <br> </div> </div> <div class="col-1 col-1-xlarge col-1-large col-12-medium col-12-small col-12-xsmall"></div> <div class="col-6 col-6-xlarge col-6-large col-12-medium col-12-small col-12-xsmall" style="position:sticky; top:0; height:100%;"> <!-- Product Properties container --> <br> <div style="display: flex;justify-content: flex-end;"> <div class="line-it-button" j-set-url="data-url=ThisProductUrl" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-color="default" data-size="small" data-count="false" data-ver="3" style="display: none;"></div> <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"><\/script> <a j-if="IsMobile" class="btn btn-sm btn-primary" onclick="shareToMessenger(event);" style="border:0;padding:0 6px;margin:0;height:20px;font-size:10px;font-weight:600;line-height:20px;"><i class="bi bi-facebook" style="margin-right:3px;line-height:20px;"></i>\n\u5206\u4EAB</a> </div> <br> <br> <div class="box shadow p-3 mb-5 rounded" style="border-width: 2px;"> <!-- Product Properties container --> <div class="row"> ', ' <div class="row"> ', ' </div> <br> <br> <br> <div class="row"> <div class="col-3"> ', ' </div> <div class="col-9"> ', " ", ' </div> </div> <br> <br> <hr> </div> <br> <!-- lg \u4EE5\u4E0A\u986F\u793A 2:10 & 3:9 --> <div class="d-none d-lg-block"> <div class="row"> <div class="col-2 col-2-xlarge col-3-large col-12-medium col-12-small col-12-xsmall"> <code><b>\u984F\u8272</b></code> </div> <div class="col-10 col-10-xlarge col-9-large col-12-medium col-12-small col-12-xsmall product-colors"> ', ' </div> </div> <br> <div class="row"> <div class="col-2 col-2-xlarge col-3-large col-12-medium col-12-small col-12-xsmall"> <code><b>\u5C3A\u5BF8</b></code> </div> <div class="col-10 col-10-xlarge col-9-large col-12-medium col-12-small col-12-xsmall product-sizes"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> </div> <!-- md \u4EE5\u4E0B\u986F\u793A 12:12 --> <div class="d-block d-lg-none"> <div class="row"> <div class="col-12 text-left"> <code><b>\u984F\u8272</b></code> </div> <br><br> <div class="col-12 text-right product-colors"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> <br> <div class="row"> <div class="col-12 text-left"> <code><b>\u5C3A\u5BF8</b></code> </div> <br><br> <div class="col-12 text-right product-sizes"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> </div> <br> </div> <div class="row"> <div class="col-6 col-12-small"> <ul class="actions stacked"> ', ' </ul> </div> <div class="col-6 col-12-small"> <ul class="actions stacked"> ', " </ul> </div> </div> </div> <!-- Content --> </div> </div> </section>"])), maybeRenderHead(), brandName && renderTemplate`<li class="breadcrumb-item"> <a class="link-dark"${addAttribute(`/${brandName.toLowerCase()}/index.html`, "href")}> ${brandName} </a> </li>`, content.ProductName && renderTemplate`<li class="breadcrumb-item active" aria-current="page"> ${content.ProductName} </li>`, ExtendedImgObjList && ExtendedImgObjList.map((o) => {
-    return renderTemplate`<a${addAttribute(o.url, "href")}> <img${addAttribute(o.url, "src")}${addAttribute(o.tag, "data-product-img-label")}> </a>`;
-  }), ExtendedImgObjList && ExtendedImgObjList.map((o) => {
-    return renderTemplate`<div class="mySlides product-fade" style="overflow:hidden;"> <div class="text-center product-img-mask zoom-in"${addAttribute(`background-image:url('${o.url}');`, "style")}${addAttribute(o.tag, "data-product-img-label")}> <img${addAttribute(o.url, "src")} style="width:80%;visibility:hidden;"> </div> </div>`;
-  }), ExtendedImgObjList && renderTemplate`${renderComponent($$result, "Fragment", Fragment, {}, { "default": ($$result2) => renderTemplate` <a class="prev" onclick="plusSlides(-1);">
-&#10094;
-</a> <a class="next" onclick="plusSlides(1);">
-&#10095;
-</a> ` })}`, ExtendedImgObjList && ExtendedImgObjList.map((o, idx) => {
-    return renderTemplate`<span class="dot"${addAttribute(`currentSlide(${idx + 1});`, "onclick")}${addAttribute(o.tag, "data-product-img-label")}${addAttribute(o.styleValue, "style")}></span>`;
-  }), content.ProductName && renderTemplate`<h4 class="user-select-all">${content.ProductName}</h4>`, content.Summary && renderTemplate`<p class="text-secondary text-top user-select-all"> ${content.Summary} </p>`, content.Logo && renderTemplate`<img${addAttribute(content.Logo, "src")} width="40" height="40" class="rounded-circle border border-white" style="vertical-align: middle;">`, Price && renderTemplate`<h5 class="text-end" style="color:black;">
-NT$ ${Price} </h5>`, Discounted && renderTemplate`<h5 class="text-end" style="color:IndianRed;"> <sup class="text-decoration-line-through" style="color:Silver;">
-NT$${Original} </sup>
-NT$${Discounted} </h5>`, ColreSizeList.map((cs) => {
-    return renderTemplate`<div class="mine-circle-fill" onclick="onClickProductColor(event);"${addAttribute(cs.label, "data-product-img-label")}${addAttribute(cs.sizes, "data-sizes")}${addAttribute(cs.color, "data-color")}${addAttribute(`background-color:${cs.color};`, "style")}></div>`;
-  }), AllSizes.map((size) => {
-    return renderTemplate`<span class="badge text-bg-dark mine-size-button"${addAttribute(size, "data-product-size")}> ${size} </span>`;
-  }), ColreSizeList.map((cs) => {
-    return renderTemplate`<div class="mine-circle-fill" onclick="onClickProductColor(event);"${addAttribute(cs.label, "data-product-img-label")}${addAttribute(cs.sizes, "data-sizes")}${addAttribute(cs.color, "data-color")}${addAttribute(`background-color:${cs.color};`, "style")}></div>`;
-  }), AllSizes.map((size) => {
-    return renderTemplate`<span class="badge text-bg-dark mine-size-button"${addAttribute(size, "data-product-size")}> ${size} </span>`;
-  }), content.SizeGuide && renderTemplate`<li> <a class="button fit" onclick="showInsideWindowByUrl(event);"${addAttribute(content.SizeGuide, "data-url")}> <i class="bi bi-rulers" style="font-size: 1.2em;"></i>
-尺碼表
-</a> </li>`, content.PurchaseUrl ? renderTemplate`<li> <a class="button shopee fit"${addAttribute(content.PurchaseUrl, "href")} target="_blank"> <i class="bi bi-bag-fill" style="font-size: 1.2em;"></i>
-蝦皮下單
-</a> </li>` : renderTemplate`<li> <a href="https://line.me/R/ti/p/@457xrpaj" class="button line fit" target="_blank"> <i class="bi bi-line" style="font-size: 1.2em;"></i>
-歡迎來店洽詢
-</a> </li>`);
-}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/ProductMain.astro", void 0);
-
-const $$Astro$5 = createAstro("https://astro4missport.mirochiu.page");
-const $$ProductFooter = createComponent(async ($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro$5, $$props, $$slots);
-  Astro2.self = $$ProductFooter;
-  const { content } = Astro2.props;
-  const Transformers = {
-    Description: (v) => v ? v.replaceAll("\n", "<br />") : "",
-    Temperature: (v) => v ? v.replaceAll("\xBAC", "<sup>\xBAC</sup>") : "",
-    SunProtect: (v) => v ? v.replaceAll("+", "<sup>+</sup>") : "",
-    Water: (v) => {
-      if (!v)
-        return "";
-      const STAR_ICON = '<i class="bi bi-star-fill text-muted"></i>';
-      const UNSTAR_ICON = '<i class="bi bi-star"></i>';
-      const stars = parseInt(v);
-      if (isNaN(stars))
-        return "";
-      return [1, 2, 3, 4, 5].map((v2) => stars >= v2 ? STAR_ICON : UNSTAR_ICON).join("");
-    }
-  };
-  const Description = Transformers.Description(content.Description);
-  const Temperature = Transformers.Temperature(content.Temperature);
-  const SunProtect = Transformers.SunProtect(content.SunProtect);
-  const Water = Transformers.Water(content.Water);
-  return renderTemplate`<!-- Footer -->${maybeRenderHead()}<section id="footer" class="wrapper"> <div class="col-10 box" style="margin-left: auto; margin-right: auto;"> <div class="row"> <div class="col-7 col-7-xlarge col-7-large col-12-medium col-12-small col-12-xsmall"> <div class="row"> <header class="major special"> <h2 class="text-center"> <i class="fa-solid fa-globe fa-xl"></i> </h2> <br> <h2 class="text-center">商品介紹</h2> </header> </div> <div class="row"> <div class="col-1"></div> <div class="col-10"> <!-- lg 以上顯示 Description + PadTech --> <div class="d-none d-lg-block"> <blockquote> <p>${unescapeHTML(Description)}</p> <p class="PadTech">${unescapeHTML(content.PadTech)}</p> </blockquote> </div> <!-- md 以下顯示 Description --> <div class="d-block d-lg-none"> <p>${unescapeHTML(Description)}</p> <br><hr> </div> </div> <div class="col-1"></div> </div> </div> <div class="d-none d-md-block col-1" style="border-right: thick solid #C0C0C0; border-width:1px; left:50%;"></div> <div class="d-block d-md-none"><br><br></div> <div class="col-4 col-4-xlarge col-4-large col-12-medium col-12-small col-12-xsmall"> <header class="major special"> <h2 class="text-center"> <i class="fa-solid fa-list-check fa-xl"></i> </h2> <br> <h2 class="text-center">商品特色</h2> </header> <ul class="alt" style="list-style-type: none; margin: 0; padding: 0;"> ${content.Style && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>版型</b> </code> </div> <div class="col-7">${content.Style}</div> </div> </li>`} ${content.CyclingType && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>適用場合</b> </code> </div> <div class="col-7">${content.CyclingType}</div> </div> </li>`} ${Temperature && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>建議溫度</b> </code> </div> <div class="col-7">${unescapeHTML(Temperature)}</div> </div> </li>`} ${SunProtect && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>防曬係數</b> </code> </div> <div class="col-7">${unescapeHTML(SunProtect)}</div> </div> </li>`} ${Water && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>防水等級</b> </code> </div> <div class="col-7">${unescapeHTML(Water)}</div> </div> </li>`} ${content.Weight && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>重量</b> </code> </div> <div class="col-7">${content.Weight}</div> </div> </li>`} ${content.Pad && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>褲墊款式</b> </code> </div> <div class="col-7">${content.Pad}</div> </div> </li>`} ${content.Feature1 && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>細節特點</b> </code> </div> <div class="col-7">${content.Feature1}</div> </div> </li>`} ${content.Feature2 && renderTemplate`<li> <div class="row"> <div class="col-5"></div> <div class="col-7">${content.Feature2}</div> </div> </li>`} ${content.Feature3 && renderTemplate`<li> <div class="row"> <div class="col-5"></div> <div class="col-7">${content.Feature3}</div> </div> </li>`} </ul> </div> </div> </div> </section>`;
-}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/ProductFooter.astro", void 0);
-
-var __freeze = Object.freeze;
-var __defProp = Object.defineProperty;
-var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(raw || cooked.slice()) }));
-var _a;
-const $$Astro$4 = createAstro("https://astro4missport.mirochiu.page");
-const $$ProductLayout = createComponent(async ($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro$4, $$props, $$slots);
-  Astro2.self = $$ProductLayout;
-  const { title, darkText, content, brandName } = Astro2.props;
-  return renderTemplate(_a || (_a = __template(["<html> <head><title>", '</title><meta charset="utf-8">', '<link rel="icon" type="images/x-icon" href="https://storage.googleapis.com/mis-sport/logo/favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><link rel="stylesheet" href="/assets/css/main.css"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"><!-- carousel-10 --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css"><!-- fontawesome icon --><link href="/assets/fontawesome-free-6.4.0-web/css/fontawesome.css" rel="stylesheet"><link href="/assets/fontawesome-free-6.4.0-web/css/brands.css" rel="stylesheet"><link href="/assets/fontawesome-free-6.4.0-web/css/solid.css" rel="stylesheet"><!-- update existing v5 CSS to use v6 icons and assets --><link href="/assets/fontawesome-free-6.4.0-web/css/v5-font-face.css" rel="stylesheet"><!-- Bootstrap Icons 1.9.1 https://icons.getbootstrap.com/#install --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"><script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"><\/script><script defer src="/assets/js/jquery.min.js"><\/script><script defer src="/assets/js/jquery.scrollex.min.js"><\/script><script defer src="/assets/js/jquery.scrolly.min.js"><\/script><script defer src="/assets/js/jquery.selectorr.min.js"><\/script><script defer src="/assets/js/browser.min.js"><\/script><script defer src="/assets/js/breakpoints.min.js"><\/script><script defer src="/assets/js/util.js"><\/script><script defer src="/assets/js/main.js"><\/script>', `</head> <body class="is-preload"> <div class="img-full-page" onclick="this.style.display='none';"></div> <!-- Page wrapper --> <div id="page-wrapper"> `, " ", " ", " ", " ", " </div> ", ' <!-- Scripts --> <!-- fontawesome icon --> <script defer src="/assets/fontawesome-free-6.4.0-web/js/fontawesome.min.js"><\/script>  </body> </html>'])), title, renderSlot($$result, $$slots["in-head"]), renderHead(), renderComponent($$result, "Header", $$Header, { "darkText": darkText }), renderComponent($$result, "Navigator", $$Navigator, {}), renderSlot($$result, $$slots["default"]), renderComponent($$result, "Main", $$ProductMain, { "brandName": brandName, "content": content }), renderComponent($$result, "Footer", $$ProductFooter, { "content": content }), renderComponent($$result, "Copyright", $$Copyright, {}));
-}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/layouts/ProductLayout.astro", void 0);
-
 const range$3 = "'BICYCLE-LINE'!A1:AM200";
 const majorDimension$3 = "ROWS";
 const values$3 = [
@@ -1705,117 +1508,6 @@ const json$3 = {
 	values: values$3
 };
 
-const SheetJsonToStaticRoute = (SheetName, data) => {
-  const [header, ...rows] = data.values;
-  const indexies = {
-    topic: -1,
-    series: -1,
-    name: -1
-  };
-  header.forEach((value, index) => {
-    const fieldName = value.trim();
-    switch (fieldName) {
-      case "Topic":
-        indexies.topic = index;
-        break;
-      case "EnglishSeries":
-        indexies.series = index;
-        break;
-      case "EnglishName":
-        indexies.name = index;
-        break;
-    }
-  });
-  if (indexies.name < 0 || indexies.topic < 0 || indexies.series < 0) {
-    console.debug(indexies);
-    throw new Error(
-      "essential indexies should be defined in the first row in json"
-    );
-  }
-  const last = {
-    topic: "",
-    series: ""
-  };
-  const products = rows.map((row, _idx) => {
-    if (row.length == 0)
-      return null;
-    let topic = row[indexies.topic];
-    let series = row[indexies.series];
-    let name = row[indexies.name];
-    if (topic && topic.trim().length > 0) {
-      last.topic = topic = topic.trim();
-    } else {
-      topic = last.topic;
-    }
-    if (series && series.trim().length > 0) {
-      last.series = series = series.trim();
-    } else {
-      series = last.series;
-    }
-    if (name)
-      name = name.trim();
-    if (!topic) {
-      return null;
-    }
-    if (!series) {
-      return null;
-    }
-    if (!name) {
-      return null;
-    }
-    const content = header.reduce(
-      (obj, rawFieldName, fieldIndex) => {
-        const fieldName = rawFieldName.trim();
-        let value = row[fieldIndex];
-        if (value)
-          value = value.trim();
-        obj[fieldName] = value || "";
-        return obj;
-      },
-      {}
-    );
-    return {
-      params: {
-        brand: SheetName,
-        topic: topic.replaceAll(" ", "_"),
-        series: series.replaceAll(" ", "_"),
-        name: name.replaceAll(" ", "_")
-      },
-      props: { content }
-    };
-  }).filter(Boolean);
-  return products;
-};
-
-const $$Astro$3 = createAstro("https://astro4missport.mirochiu.page");
-function getStaticPaths$3() {
-  const products = SheetJsonToStaticRoute("BICYCLE-LINE", json$3);
-  console.debug(`BICYCLE-LINE' products:${products.length}`);
-  return products;
-}
-const $$name$3 = createComponent(async ($$result, $$props, $$slots) => {
-  const Astro2 = $$result.createAstro($$Astro$3, $$props, $$slots);
-  Astro2.self = $$name$3;
-  const BRAND_NAME = "BICYCLE-LINE";
-  const BASE_URL = "https://astro4missport.mirochiu.page";
-  const { topic, series, name } = Astro2.params;
-  const { content } = Astro2.props;
-  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
-  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
-  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
-}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro", void 0);
-
-const $$file$3 = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro";
-const $$url$3 = "/product/BICYCLE-LINE/[topic]/[series]/[name]";
-
-const _name_$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-    __proto__: null,
-    default: $$name$3,
-    file: $$file$3,
-    getStaticPaths: getStaticPaths$3,
-    url: $$url$3
-}, Symbol.toStringTag, { value: 'Module' }));
-
 const range$2 = "PROTEAMS!A1:AM200";
 const majorDimension$2 = "ROWS";
 const values$2 = [
@@ -2944,6 +2636,314 @@ const json$2 = {
 	majorDimension: majorDimension$2,
 	values: values$2
 };
+
+const str2token = (s) =>
+    s
+        .split(";")
+        .map((v) => v.trim())
+        .filter(Boolean);
+
+const token2tagUrl = (list) => {
+    let tag;
+    return list.map((token) => {
+        let url = token;
+        if (token.startsWith("[")) {
+            let splited = token.split("]");
+            tag = splited[0].substring(1).trim();
+            url = splited.slice(1).join("]");
+        }
+        return { tag, url: url.trim() };
+    });
+};
+
+
+const AllSizes = ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
+
+// input string format:'x-y'
+// support rules:s-l, s-, m
+// output array:[], [x], [x,y,z,...]
+const str2sizes = (s) => {
+    if (s && typeof s === 'string') {
+        const t = s.trim();
+        const r = t.toUpperCase().split('-');
+        if (r.length == 1) return [r]
+        const b = AllSizes.indexOf(r[0]);
+        if (b != -1) {
+            let e = AllSizes.indexOf(r[1]);
+            if (e >= 0) e += 1;
+            else if (r.length > 1) e = AllSizes.length;
+            return AllSizes.slice(b, e)
+        }
+    }
+    return []
+};
+
+// input string format: 'color' or 'color(x-y)' or '[label]color(x-y)'
+// output object:{ label:string, color:string, sizes:array}
+const str2obj = (s) => {
+    if (s && typeof s !== 'string') return null
+    let o = {}, t = s.trim(), p;
+    if (t.startsWith('[')) {
+        p = t.indexOf(']');
+        if (p != -1) o.label = t.substring(1, p).trim();
+        t = t.substring(p + 1);
+    }
+    p = t.indexOf('(');
+    o.color = (p === -1 ? t : t.substring(0, p)).trim();
+    if (!o.color) return null
+    if (p === -1) {
+        o.sizes = [];
+        return o
+    }
+    t = t.substring(p + 1);
+    p = t.lastIndexOf(')');
+    if (p === -1) return null
+    o.sizes = str2sizes(t.substring(0, p));
+    return o
+};
+
+const ToImgObjectList = (ImgList, Img) => token2tagUrl(str2token(ImgList || Img || ''));
+
+const ToColreSizeList = (ColorWithSizes) => str2token(ColorWithSizes || '').map(str2obj).filter(Boolean);
+
+var __freeze$1 = Object.freeze;
+var __defProp$1 = Object.defineProperty;
+var __template$1 = (cooked, raw) => __freeze$1(__defProp$1(cooked, "raw", { value: __freeze$1(raw || cooked.slice()) }));
+var _a$1;
+const $$Astro$6 = createAstro("https://astro4missport.mirochiu.page");
+const $$ProductMain = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro$6, $$props, $$slots);
+  Astro2.self = $$ProductMain;
+  const { brandName, content } = Astro2.props;
+  const withComma = (v) => {
+    let num = NaN;
+    if (typeof v === "number")
+      num = v;
+    else if (typeof v === "string")
+      num = parseInt(v);
+    return !isNaN(num) && num.toLocaleString() || "";
+  };
+  const setupPrices = (v1, v2) => {
+    const retval = {};
+    let i1 = parseInt(v1 || ""), i2 = parseInt(v2 || "");
+    if (isNaN(i1)) {
+      if (isNaN(i2))
+        throw new Error(`invalid prices:${v1} ${v2}`);
+      retval.Price = withComma(i2);
+    } else if (isNaN(i2)) {
+      retval.Price = withComma(i1);
+    } else if (i1 == i2) {
+      retval.Price = withComma(i1);
+    } else {
+      if (i1 > i2) {
+        retval.Original = withComma(i1);
+        retval.Discounted = withComma(i2);
+      } else {
+        retval.Original = withComma(i2);
+        retval.Discounted = withComma(i1);
+      }
+    }
+    return retval;
+  };
+  const { Price, Original, Discounted } = setupPrices(
+    content.Price,
+    content.Price2
+  );
+  const ColreSizeList = ToColreSizeList(
+    content.ColorWithSizes
+  );
+  const ExtendedImgObjList = ToImgObjectList(
+    content.ImgList,
+    content.Img
+  ).map((io) => {
+    const found = ColreSizeList.find(
+      (c) => c.label === io.tag
+    );
+    return {
+      ...io,
+      styleValue: found ? `background-color:${found.color};opacity:0.6;border:solid 1px` : null
+    };
+  });
+  const AllSizes = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+  return renderTemplate(_a$1 || (_a$1 = __template$1(["<!-- Main -->", `<section id="main" class="wrapper style2"> <div class="inner"> <!-- Buttons --> <ul j-if="CanBack" class="actions"> <li> <a href="#" class="button" onclick="history.back();">\u56DE\u4E0A\u9801</a> </li> </ul> <hr> <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb"> <ol class="breadcrumb"> <li class="breadcrumb-item"> <a class="link-dark" href="/">HOME</a> </li> `, " ", ' </ol> </nav> <hr> <!-- Content --> <div class="row" style="display:flex; flex-direction:row;"> <div class="col-5 col-5-xlarge col-5-large col-12-medium col-12-small col-12-xsmall"> <!-- lg \u4EE5\u4E0A\u986F\u793A .gallery --> <div class="gallery d-none d-lg-block product-img-window"> ', ' </div> <!-- md \u4EE5\u4E0B\u986F\u793A .slideshow-container --> <div class="d-block d-lg-none"> <!-- Slideshow container --> <div class="slideshow-container product-img-slider"> ', " ", ' </div> <div class="product-img-dots" style="text-align:center"> ', ' </div> <br> </div> </div> <div class="col-1 col-1-xlarge col-1-large col-12-medium col-12-small col-12-xsmall"></div> <div class="col-6 col-6-xlarge col-6-large col-12-medium col-12-small col-12-xsmall" style="position:sticky; top:0; height:100%;"> <!-- Product Properties container --> <br> <div style="display: flex;justify-content: flex-end;"> <div class="line-it-button" j-set-url="data-url=ThisProductUrl" data-lang="zh_Hant" data-type="share-a" data-env="REAL" data-color="default" data-size="small" data-count="false" data-ver="3" style="display: none;"></div> <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"><\/script> <a j-if="IsMobile" class="btn btn-sm btn-primary" onclick="shareToMessenger(event);" style="border:0;padding:0 6px;margin:0;height:20px;font-size:10px;font-weight:600;line-height:20px;"><i class="bi bi-facebook" style="margin-right:3px;line-height:20px;"></i>\n\u5206\u4EAB</a> </div> <br> <br> <div class="box shadow p-3 mb-5 rounded" style="border-width: 2px;"> <!-- Product Properties container --> <div class="row"> ', ' <div class="row"> ', ' </div> <br> <br> <br> <div class="row"> <div class="col-3"> ', ' </div> <div class="col-9"> ', " ", ' </div> </div> <br> <br> <hr> </div> <br> <!-- lg \u4EE5\u4E0A\u986F\u793A 2:10 & 3:9 --> <div class="d-none d-lg-block"> <div class="row"> <div class="col-2 col-2-xlarge col-3-large col-12-medium col-12-small col-12-xsmall"> <code><b>\u984F\u8272</b></code> </div> <div class="col-10 col-10-xlarge col-9-large col-12-medium col-12-small col-12-xsmall product-colors"> ', ' </div> </div> <br> <div class="row"> <div class="col-2 col-2-xlarge col-3-large col-12-medium col-12-small col-12-xsmall"> <code><b>\u5C3A\u5BF8</b></code> </div> <div class="col-10 col-10-xlarge col-9-large col-12-medium col-12-small col-12-xsmall product-sizes"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> </div> <!-- md \u4EE5\u4E0B\u986F\u793A 12:12 --> <div class="d-block d-lg-none"> <div class="row"> <div class="col-12 text-left"> <code><b>\u984F\u8272</b></code> </div> <br><br> <div class="col-12 text-right product-colors"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> <br> <div class="row"> <div class="col-12 text-left"> <code><b>\u5C3A\u5BF8</b></code> </div> <br><br> <div class="col-12 text-right product-sizes"> <div class="row"> <div class="col-12"> ', ' </div> </div> </div> </div> </div> <br> </div> <div class="row"> <div class="col-6 col-12-small"> <ul class="actions stacked"> ', ' </ul> </div> <div class="col-6 col-12-small"> <ul class="actions stacked"> ', " </ul> </div> </div> </div> <!-- Content --> </div> </div> </section>"])), maybeRenderHead(), brandName && renderTemplate`<li class="breadcrumb-item"> <a class="link-dark"${addAttribute(`/${brandName.toLowerCase()}/index.html`, "href")}> ${brandName} </a> </li>`, content.ProductName && renderTemplate`<li class="breadcrumb-item active" aria-current="page"> ${content.ProductName} </li>`, ExtendedImgObjList && ExtendedImgObjList.map((o) => {
+    return renderTemplate`<a${addAttribute(o.url, "href")}> <img${addAttribute(o.url, "src")}${addAttribute(o.tag, "data-product-img-label")}> </a>`;
+  }), ExtendedImgObjList && ExtendedImgObjList.map((o) => {
+    return renderTemplate`<div class="mySlides product-fade" style="overflow:hidden;"> <div class="text-center product-img-mask zoom-in"${addAttribute(`background-image:url('${o.url}');`, "style")}${addAttribute(o.tag, "data-product-img-label")}> <img${addAttribute(o.url, "src")} style="width:80%;visibility:hidden;"> </div> </div>`;
+  }), ExtendedImgObjList && renderTemplate`${renderComponent($$result, "Fragment", Fragment, {}, { "default": ($$result2) => renderTemplate` <a class="prev" onclick="plusSlides(-1);">
+&#10094;
+</a> <a class="next" onclick="plusSlides(1);">
+&#10095;
+</a> ` })}`, ExtendedImgObjList && ExtendedImgObjList.map((o, idx) => {
+    return renderTemplate`<span class="dot"${addAttribute(`currentSlide(${idx + 1});`, "onclick")}${addAttribute(o.tag, "data-product-img-label")}${addAttribute(o.styleValue, "style")}></span>`;
+  }), content.ProductName && renderTemplate`<h4 class="user-select-all">${content.ProductName}</h4>`, content.Summary && renderTemplate`<p class="text-secondary text-top user-select-all"> ${content.Summary} </p>`, content.Logo && renderTemplate`<img${addAttribute(content.Logo, "src")} width="40" height="40" class="rounded-circle border border-white" style="vertical-align: middle;">`, Price && renderTemplate`<h5 class="text-end" style="color:black;">
+NT$ ${Price} </h5>`, Discounted && renderTemplate`<h5 class="text-end" style="color:IndianRed;"> <sup class="text-decoration-line-through" style="color:Silver;">
+NT$${Original} </sup>
+NT$${Discounted} </h5>`, ColreSizeList.map((cs) => {
+    return renderTemplate`<div class="mine-circle-fill" onclick="onClickProductColor(event);"${addAttribute(cs.label, "data-product-img-label")}${addAttribute(cs.sizes, "data-sizes")}${addAttribute(cs.color, "data-color")}${addAttribute(`background-color:${cs.color};`, "style")}></div>`;
+  }), AllSizes.map((size) => {
+    return renderTemplate`<span class="badge text-bg-dark mine-size-button"${addAttribute(size, "data-product-size")}> ${size} </span>`;
+  }), ColreSizeList.map((cs) => {
+    return renderTemplate`<div class="mine-circle-fill" onclick="onClickProductColor(event);"${addAttribute(cs.label, "data-product-img-label")}${addAttribute(cs.sizes, "data-sizes")}${addAttribute(cs.color, "data-color")}${addAttribute(`background-color:${cs.color};`, "style")}></div>`;
+  }), AllSizes.map((size) => {
+    return renderTemplate`<span class="badge text-bg-dark mine-size-button"${addAttribute(size, "data-product-size")}> ${size} </span>`;
+  }), content.SizeGuide && renderTemplate`<li> <a class="button fit" onclick="showInsideWindowByUrl(event);"${addAttribute(content.SizeGuide, "data-url")}> <i class="bi bi-rulers" style="font-size: 1.2em;"></i>
+尺碼表
+</a> </li>`, content.PurchaseUrl ? renderTemplate`<li> <a class="button shopee fit"${addAttribute(content.PurchaseUrl, "href")} target="_blank"> <i class="bi bi-bag-fill" style="font-size: 1.2em;"></i>
+蝦皮下單
+</a> </li>` : renderTemplate`<li> <a href="https://line.me/R/ti/p/@457xrpaj" class="button line fit" target="_blank"> <i class="bi bi-line" style="font-size: 1.2em;"></i>
+歡迎來店洽詢
+</a> </li>`);
+}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/ProductMain.astro", void 0);
+
+const $$Astro$5 = createAstro("https://astro4missport.mirochiu.page");
+const $$ProductFooter = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro$5, $$props, $$slots);
+  Astro2.self = $$ProductFooter;
+  const { content } = Astro2.props;
+  const Transformers = {
+    Description: (v) => v ? v.replaceAll("\n", "<br />") : "",
+    Temperature: (v) => v ? v.replaceAll("\xBAC", "<sup>\xBAC</sup>") : "",
+    SunProtect: (v) => v ? v.replaceAll("+", "<sup>+</sup>") : "",
+    Water: (v) => {
+      if (!v)
+        return "";
+      const STAR_ICON = '<i class="bi bi-star-fill text-muted"></i>';
+      const UNSTAR_ICON = '<i class="bi bi-star"></i>';
+      const stars = parseInt(v);
+      if (isNaN(stars))
+        return "";
+      return [1, 2, 3, 4, 5].map((v2) => stars >= v2 ? STAR_ICON : UNSTAR_ICON).join("");
+    }
+  };
+  const Description = Transformers.Description(content.Description);
+  const Temperature = Transformers.Temperature(content.Temperature);
+  const SunProtect = Transformers.SunProtect(content.SunProtect);
+  const Water = Transformers.Water(content.Water);
+  return renderTemplate`<!-- Footer -->${maybeRenderHead()}<section id="footer" class="wrapper"> <div class="col-10 box" style="margin-left: auto; margin-right: auto;"> <div class="row"> <div class="col-7 col-7-xlarge col-7-large col-12-medium col-12-small col-12-xsmall"> <div class="row"> <header class="major special"> <h2 class="text-center"> <i class="fa-solid fa-globe fa-xl"></i> </h2> <br> <h2 class="text-center">商品介紹</h2> </header> </div> <div class="row"> <div class="col-1"></div> <div class="col-10"> <!-- lg 以上顯示 Description + PadTech --> <div class="d-none d-lg-block"> <blockquote> <p>${unescapeHTML(Description)}</p> <p class="PadTech">${unescapeHTML(content.PadTech)}</p> </blockquote> </div> <!-- md 以下顯示 Description --> <div class="d-block d-lg-none"> <p>${unescapeHTML(Description)}</p> <br><hr> </div> </div> <div class="col-1"></div> </div> </div> <div class="d-none d-md-block col-1" style="border-right: thick solid #C0C0C0; border-width:1px; left:50%;"></div> <div class="d-block d-md-none"><br><br></div> <div class="col-4 col-4-xlarge col-4-large col-12-medium col-12-small col-12-xsmall"> <header class="major special"> <h2 class="text-center"> <i class="fa-solid fa-list-check fa-xl"></i> </h2> <br> <h2 class="text-center">商品特色</h2> </header> <ul class="alt" style="list-style-type: none; margin: 0; padding: 0;"> ${content.Style && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>版型</b> </code> </div> <div class="col-7">${content.Style}</div> </div> </li>`} ${content.CyclingType && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>適用場合</b> </code> </div> <div class="col-7">${content.CyclingType}</div> </div> </li>`} ${Temperature && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>建議溫度</b> </code> </div> <div class="col-7">${unescapeHTML(Temperature)}</div> </div> </li>`} ${SunProtect && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>防曬係數</b> </code> </div> <div class="col-7">${unescapeHTML(SunProtect)}</div> </div> </li>`} ${Water && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>防水等級</b> </code> </div> <div class="col-7">${unescapeHTML(Water)}</div> </div> </li>`} ${content.Weight && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>重量</b> </code> </div> <div class="col-7">${content.Weight}</div> </div> </li>`} ${content.Pad && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>褲墊款式</b> </code> </div> <div class="col-7">${content.Pad}</div> </div> </li>`} ${content.Feature1 && renderTemplate`<li> <div class="row"> <div class="col-5"> <code> <b>細節特點</b> </code> </div> <div class="col-7">${content.Feature1}</div> </div> </li>`} ${content.Feature2 && renderTemplate`<li> <div class="row"> <div class="col-5"></div> <div class="col-7">${content.Feature2}</div> </div> </li>`} ${content.Feature3 && renderTemplate`<li> <div class="row"> <div class="col-5"></div> <div class="col-7">${content.Feature3}</div> </div> </li>`} </ul> </div> </div> </div> </section>`;
+}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/ProductFooter.astro", void 0);
+
+var __freeze = Object.freeze;
+var __defProp = Object.defineProperty;
+var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(raw || cooked.slice()) }));
+var _a;
+const $$Astro$4 = createAstro("https://astro4missport.mirochiu.page");
+const $$ProductLayout = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro$4, $$props, $$slots);
+  Astro2.self = $$ProductLayout;
+  const { title, darkText, content, brandName } = Astro2.props;
+  return renderTemplate(_a || (_a = __template(["<html> <head><title>", '</title><meta charset="utf-8">', '<link rel="icon" type="images/x-icon" href="https://storage.googleapis.com/mis-sport/logo/favicon.ico"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><link rel="stylesheet" href="/assets/css/main.css"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"><!-- carousel-10 --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css"><!-- fontawesome icon --><link href="/assets/fontawesome-free-6.4.0-web/css/fontawesome.css" rel="stylesheet"><link href="/assets/fontawesome-free-6.4.0-web/css/brands.css" rel="stylesheet"><link href="/assets/fontawesome-free-6.4.0-web/css/solid.css" rel="stylesheet"><!-- update existing v5 CSS to use v6 icons and assets --><link href="/assets/fontawesome-free-6.4.0-web/css/v5-font-face.css" rel="stylesheet"><!-- Bootstrap Icons 1.9.1 https://icons.getbootstrap.com/#install --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"><script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"><\/script><script defer src="/assets/js/jquery.min.js"><\/script><script defer src="/assets/js/jquery.scrollex.min.js"><\/script><script defer src="/assets/js/jquery.scrolly.min.js"><\/script><script defer src="/assets/js/jquery.selectorr.min.js"><\/script><script defer src="/assets/js/browser.min.js"><\/script><script defer src="/assets/js/breakpoints.min.js"><\/script><script defer src="/assets/js/util.js"><\/script><script defer src="/assets/js/main.js"><\/script>', `</head> <body class="is-preload"> <div class="img-full-page" onclick="this.style.display='none';"></div> <!-- Page wrapper --> <div id="page-wrapper"> `, " ", " ", " ", " ", " </div> ", ' <!-- Scripts --> <!-- fontawesome icon --> <script defer src="/assets/fontawesome-free-6.4.0-web/js/fontawesome.min.js"><\/script>  </body> </html>'])), title, renderSlot($$result, $$slots["in-head"]), renderHead(), renderComponent($$result, "Header", $$Header, { "darkText": darkText }), renderComponent($$result, "Navigator", $$Navigator, {}), renderSlot($$result, $$slots["default"]), renderComponent($$result, "Main", $$ProductMain, { "brandName": brandName, "content": content }), renderComponent($$result, "Footer", $$ProductFooter, { "content": content }), renderComponent($$result, "Copyright", $$Copyright, {}));
+}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/layouts/ProductLayout.astro", void 0);
+
+const SheetJsonToStaticRoute = (SheetName, data) => {
+  const [header, ...rows] = data.values;
+  const indexies = {
+    topic: -1,
+    series: -1,
+    name: -1
+  };
+  header.forEach((value, index) => {
+    const fieldName = value.trim();
+    switch (fieldName) {
+      case "Topic":
+        indexies.topic = index;
+        break;
+      case "EnglishSeries":
+        indexies.series = index;
+        break;
+      case "EnglishName":
+        indexies.name = index;
+        break;
+    }
+  });
+  if (indexies.name < 0 || indexies.topic < 0 || indexies.series < 0) {
+    console.debug(indexies);
+    throw new Error(
+      "essential indexies should be defined in the first row in json"
+    );
+  }
+  const last = {
+    topic: "",
+    series: ""
+  };
+  const products = rows.map((row, _idx) => {
+    if (row.length == 0)
+      return null;
+    let topic = row[indexies.topic];
+    let series = row[indexies.series];
+    let name = row[indexies.name];
+    if (topic && topic.trim().length > 0) {
+      last.topic = topic = topic.trim();
+    } else {
+      topic = last.topic;
+    }
+    if (series && series.trim().length > 0) {
+      last.series = series = series.trim();
+    } else {
+      series = last.series;
+    }
+    if (name)
+      name = name.trim();
+    if (!topic) {
+      return null;
+    }
+    if (!series) {
+      return null;
+    }
+    if (!name) {
+      return null;
+    }
+    const content = header.reduce(
+      (obj, rawFieldName, fieldIndex) => {
+        const fieldName = rawFieldName.trim();
+        let value = row[fieldIndex];
+        if (value)
+          value = value.trim();
+        obj[fieldName] = value || "";
+        return obj;
+      },
+      {}
+    );
+    return {
+      params: {
+        brand: SheetName,
+        topic: topic.replaceAll(" ", "_"),
+        series: series.replaceAll(" ", "_"),
+        name: name.replaceAll(" ", "_")
+      },
+      props: { content }
+    };
+  }).filter(Boolean);
+  return products;
+};
+
+const $$Astro$3 = createAstro("https://astro4missport.mirochiu.page");
+function getStaticPaths$3() {
+  const products = SheetJsonToStaticRoute("BICYCLE-LINE", json$3);
+  console.debug(`BICYCLE-LINE' products:${products.length}`);
+  return products;
+}
+const $$name$3 = createComponent(async ($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro$3, $$props, $$slots);
+  Astro2.self = $$name$3;
+  const BRAND_NAME = "BICYCLE-LINE";
+  const BASE_URL = "https://astro4missport.mirochiu.page";
+  const { topic, series, name } = Astro2.params;
+  const { content } = Astro2.props;
+  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
+  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
+  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
+}, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro", void 0);
+
+const $$file$3 = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro";
+const $$url$3 = "/product/BICYCLE-LINE/[topic]/[series]/[name]";
+
+const _name_$3 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    default: $$name$3,
+    file: $$file$3,
+    getStaticPaths: getStaticPaths$3,
+    url: $$url$3
+}, Symbol.toStringTag, { value: 'Module' }));
 
 const $$Astro$2 = createAstro("https://astro4missport.mirochiu.page");
 function getStaticPaths$2() {
@@ -5447,4 +5447,4 @@ const _name_ = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
     url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { $$Copyright as $, _name_$3 as _, $$Navigator as a, $$Header as b, _name_$2 as c, _name_$1 as d, _name_ as e };
+export { $$Copyright as $, _name_$3 as _, $$Navigator as a, $$Header as b, json$3 as c, json as d, json$2 as e, _name_$2 as f, _name_$1 as g, _name_ as h, json$1 as j };
