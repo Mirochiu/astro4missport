@@ -1,6 +1,6 @@
 import { c as createAstro, a as createComponent, r as renderTemplate, m as maybeRenderHead, d as renderComponent, e as renderSlot, f as renderHead, b as addAttribute, u as unescapeHTML } from './chunk.b0db1f2f.js';
 import 'clsx';
-import { $ as $$Copyright, a as $$Navigator, b as $$Header, j as json } from './chunk.5767f534.js';
+import { $ as $$Copyright, a as $$Navigator, b as $$Header, e as embedUrl, j as json } from './chunk.bf7978d7.js';
 /* empty css                *//* empty css                */
 const $$Astro$4 = createAstro("https://astro4missport.mirochiu.page");
 const $$Footer = createComponent(async ($$result, $$props, $$slots) => {
@@ -71,7 +71,6 @@ const $$ProductCard = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$2, $$props, $$slots);
   Astro2.self = $$ProductCard;
   const { brandName, product } = Astro2.props;
-  const embedUrl = (s) => typeof s === "string" && s.trim().replaceAll("'", "%27").replaceAll('"', "%22") || "";
   const NEW_LABEL = `<img src="https://storage.googleapis.com/mis-sport/logo/new-item.png" alt="${brandName}" width="42" height="42" class="rounded-circle"></img>`;
   const SALE_LABEL = `<img src="https://storage.googleapis.com/mis-sport/logo/sale-item.png" alt="${brandName}" width="42" height="42" class="rounded-circle"></img>`;
   const NO_LABEL = `<div width="42" height="42"></div>`;
@@ -119,11 +118,13 @@ const $$ProductCard = createComponent(async ($$result, $$props, $$slots) => {
   const t = product.Topic?.replaceAll(" ", "_") || "";
   const es = product.EnglishSeries?.replaceAll(" ", "_") || "";
   const ep = product.EnglishName?.replaceAll(" ", "_") || "";
-  const productUrl = `/product/${encodeURIComponent(
-    brandName
-  )}/${encodeURIComponent(t)}/${encodeURIComponent(es)}/${encodeURIComponent(
-    ep
-  )}/index.html`;
+  const productUrl = `/${[
+    "product",
+    encodeURIComponent(brandName),
+    encodeURIComponent(t),
+    encodeURIComponent(es),
+    encodeURIComponent(ep)
+  ].join("/")}/`;
   const imgList = (product.Img || "").split(";").map(embedUrl).filter(Boolean);
   const imgUrl = imgList[0] || "";
   const hoverImgAttr = imgList[1] || null;

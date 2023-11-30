@@ -24,6 +24,8 @@ const $$Copyright = createComponent(async ($$result, $$props, $$slots) => {
 All rights reserved by <img src="https://storage.googleapis.com/mis-sport/logo/mis-logo.png" alt="logo" width="36" height="auto" class="rounded-circle"> MIS-SPORT.</span> </div> </section>`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/components/Copyright.astro", void 0);
 
+const embedUrl = (s) => typeof s === "string" && s.trim().replaceAll("'", "%27").replaceAll('"', "%22") || "";
+
 const range$3 = "'BICYCLE-LINE'!A1:AM200";
 const majorDimension$3 = "ROWS";
 const values$3 = [
@@ -2919,19 +2921,20 @@ const SheetJsonToStaticRoute = (SheetName, data) => {
 const $$Astro$3 = createAstro("https://astro4missport.mirochiu.page");
 function getStaticPaths$3() {
   const products = SheetJsonToStaticRoute("BICYCLE-LINE", json$3);
-  console.debug(`BICYCLE-LINE' products:${products.length}`);
+  console.debug(`BICYCLE-LINE products:${products.length}`);
   return products;
 }
 const $$name$3 = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$3, $$props, $$slots);
   Astro2.self = $$name$3;
-  const BRAND_NAME = "BICYCLE-LINE";
-  const BASE_URL = "https://astro4missport.mirochiu.page";
-  const { topic, series, name } = Astro2.params;
+  const BrandName = "BICYCLE-LINE";
   const { content } = Astro2.props;
-  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
-  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
-  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
+  const ProductUrl = Astro2.url.pathname;
+  const Title = `${BrandName} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
+  const FALLBACK_IMG_URL = "https://storage.googleapis.com/mis-sport/logo/mis-logo.png";
+  const imgList = (content.Img || "").split(";").map(embedUrl).filter(Boolean);
+  const ProductImgUrl = imgList[0] || FALLBACK_IMG_URL;
+  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": Title, "darkText": true, "content": content, "brandName": BrandName }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(ProductUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(Title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image"${addAttribute(ProductImgUrl, "content")}>` })}`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro", void 0);
 
 const $$file$3 = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/BICYCLE-LINE/[topic]/[series]/[name].astro";
@@ -2954,13 +2957,14 @@ function getStaticPaths$2() {
 const $$name$2 = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$2, $$props, $$slots);
   Astro2.self = $$name$2;
-  const BRAND_NAME = "PROTEAMS";
-  const BASE_URL = "https://astro4missport.mirochiu.page";
-  const { topic, series, name } = Astro2.params;
+  const BrandName = "PROTEAMS";
   const { content } = Astro2.props;
-  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
-  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
-  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
+  const ProductUrl = Astro2.url.pathname;
+  const Title = `${BrandName} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
+  const FALLBACK_IMG_URL = "https://storage.googleapis.com/mis-sport/logo/mis-logo.png";
+  const imgList = (content.Img || "").split(";").map(embedUrl).filter(Boolean);
+  const ProductImgUrl = imgList[0] || FALLBACK_IMG_URL;
+  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": Title, "darkText": true, "content": content, "brandName": BrandName }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(ProductUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(Title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image"${addAttribute(ProductImgUrl, "content")}>` })}`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/PROTEAMS/[topic]/[series]/[name].astro", void 0);
 
 const $$file$2 = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/PROTEAMS/[topic]/[series]/[name].astro";
@@ -4371,13 +4375,14 @@ function getStaticPaths$1() {
 const $$name$1 = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro$1, $$props, $$slots);
   Astro2.self = $$name$1;
-  const BRAND_NAME = "ALE";
-  const BASE_URL = "https://astro4missport.mirochiu.page";
-  const { topic, series, name } = Astro2.params;
+  const BrandName = "ALE";
   const { content } = Astro2.props;
-  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
-  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
-  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
+  const ProductUrl = Astro2.url.pathname;
+  const Title = `${BrandName} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
+  const FALLBACK_IMG_URL = "https://storage.googleapis.com/mis-sport/logo/mis-logo.png";
+  const imgList = (content.Img || "").split(";").map(embedUrl).filter(Boolean);
+  const ProductImgUrl = imgList[0] || FALLBACK_IMG_URL;
+  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": Title, "darkText": true, "content": content, "brandName": BrandName }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(ProductUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(Title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image"${addAttribute(ProductImgUrl, "content")}>` })}`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/ALE/[topic]/[series]/[name].astro", void 0);
 
 const $$file$1 = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/ALE/[topic]/[series]/[name].astro";
@@ -5427,13 +5432,14 @@ function getStaticPaths() {
 const $$name = createComponent(async ($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$name;
-  const BRAND_NAME = "MET";
-  const BASE_URL = "https://astro4missport.mirochiu.page";
-  const { topic, series, name } = Astro2.params;
+  const BrandName = "MET";
   const { content } = Astro2.props;
-  const title = `${BRAND_NAME} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
-  const productUrl = `${BASE_URL}/product/${BRAND_NAME}/${topic}/${series}/${name}`;
-  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": title, "darkText": true, "content": content, "brandName": BRAND_NAME }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(productUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image" content="https://storage.googleapis.com/mis-sport/logo/mis-logo.png">` })}`;
+  const ProductUrl = Astro2.url.pathname;
+  const Title = `${BrandName} ${content.ProductName} | MIS Sport \u7C73\u8A69\u570B\u969B`;
+  const FALLBACK_IMG_URL = "https://storage.googleapis.com/mis-sport/logo/mis-logo.png";
+  const imgList = (content.Img || "").split(";").map(embedUrl).filter(Boolean);
+  const ProductImgUrl = imgList[0] || FALLBACK_IMG_URL;
+  return renderTemplate`${renderComponent($$result, "ProductLayout", $$ProductLayout, { "title": Title, "darkText": true, "content": content, "brandName": BrandName }, { "in-head": ($$result2) => renderTemplate`<meta property="og:url"${addAttribute(ProductUrl, "content")}><meta property="og:type" content="website"><meta property="og:title"${addAttribute(Title, "content")}><meta property="og:description"${addAttribute(content.Summary, "content")}><meta property="og:image"${addAttribute(ProductImgUrl, "content")}>` })}`;
 }, "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/MET/[topic]/[series]/[name].astro", void 0);
 
 const $$file = "/mnt/hdd2/node.repo/test-astro/better-binary/src/pages/product/MET/[topic]/[series]/[name].astro";
@@ -5447,4 +5453,4 @@ const _name_ = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
     url: $$url
 }, Symbol.toStringTag, { value: 'Module' }));
 
-export { $$Copyright as $, _name_$3 as _, $$Navigator as a, $$Header as b, json$3 as c, json as d, json$2 as e, _name_$2 as f, _name_$1 as g, _name_ as h, json$1 as j };
+export { $$Copyright as $, _name_$3 as _, $$Navigator as a, $$Header as b, json$3 as c, json as d, embedUrl as e, json$2 as f, _name_$2 as g, _name_$1 as h, _name_ as i, json$1 as j };
